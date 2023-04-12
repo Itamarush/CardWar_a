@@ -2,23 +2,36 @@
 #include <string>
 using namespace std;
 
-class card
+namespace ariel
 {
-    private:
-        int num;
-        string kind;
+    class card
+    {
+        private:
+            int num;
+            int kind;
 
-    public:
-        card(int num, string kind){this->num = num; this->kind = kind;};
-        card(){};
+        public:
+            card(int num, int kind){this->num = num; this->kind = kind;};
+            string toString();
+            card(){};
 
-        int getNum () const
-        {
-            return 1;
-        }
+            int getNum () const
+            {
+                return this->num;
+            }
 
-        string getKind () const
-        {
-            return "hearts";
-        }
+            int getKind () const
+            {
+                return this->kind;
+            }
+
+            void setNum(int num)
+            {
+                this->num = num;
+            };
+            void setKind(int num)
+            {
+                this->kind = kind;
+            };
+    };
 };

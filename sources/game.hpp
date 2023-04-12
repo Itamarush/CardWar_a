@@ -8,10 +8,12 @@ namespace ariel {
         private:
         Player player1;
         Player player2;
-
+        vector<string> gameLog;
+        int p1Won, p2Won, drawTimes, numOfTurnsPlayed;
+        
         public:
-            Game(Player player1, Player player2){this->player1 = player1; this->player2 = player2;}
-            Game(){}
+             Game(Player &p1, Player &p2);
+
 
             void playTurn();
             void printLastTurn();
@@ -19,5 +21,7 @@ namespace ariel {
             void printWiner();
             void printLog();
             void printStats();
+            void CardsToPlayers(card, Player, Player, int);
+
     };
 }
