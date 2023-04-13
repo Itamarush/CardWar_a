@@ -6,6 +6,41 @@
 using namespace ariel;
 using namespace std;
 
+
+void Game::createDeck(card deck[], int sizeOfDeck)
+{
+    int i = 0;
+    for (int rank = 1; rank <= 13; rank++)
+    {
+        for (int kind = 1; kind <= 4; kind++)
+        {
+            deck[i] = (card(rank, kind));
+            i++;
+        }
+    }
+    // Create a random number generator using the current time as a seed
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng(seed);
+
+    // Shuffle the deck using std::shuffle()
+    std::shuffle(deck, deck + sizeOfDeck, rng);
+}
+
+void Game::CardsToPlayers(card* deck, int sizeOfDeck)
+{
+    for (size_t i = 0; i < sizeOfDeck; i++)
+    {
+        if (i % 2)
+        {
+            this->player1.addCardToPack(deck[i]);
+        }
+        else
+        {
+            this->player2.addCardToPack(deck[i]);
+        }
+    }
+}
+
 Game::Game(Player &player1, Player &player2) : player1(player1), player2(player2)
 {
 
@@ -21,78 +56,51 @@ Game::Game(Player &player1, Player &player2) : player1(player1), player2(player2
     
     int const sizeOfDeck = 52;
     card deck[sizeOfDeck];
-    this->player1 = player1;
-    this->player2 = player2;
     player1.joinedGame();
     player2.joinedGame();
     player1.setCardsTaken(0);
     player2.setCardsTaken(0);
     p1Won = p2Won = drawTimes = 0;
     createDeck(deck, sizeOfDeck);
-    CardsToPlayers(deck[sizeOfDeck], player1, player2, sizeOfDeck);
+    CardsToPlayers(deck, sizeOfDeck);
 }
 
-void createDeck(card deck[], int sizeOfDeck)
-{
-    int i = 0;
-    for (int rank = 1; rank <= 13; rank++)
-    {
-        for (int suit = 1; suit <= 4; suit++)
-        {
-            deck[i] = (card(rank, suit));
-            i++;
-        }
-    }
-    // Create a random number generator using the current time as a seed
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine rng(seed);
-
-    // Shuffle the deck using std::shuffle()
-    std::shuffle(deck, deck + sizeOfDeck, rng);
-}
-
-void CardsToPlayers(card deck[], Player p1, Player p2, int sizeOfDeck)
-{
-    for (size_t i = 0; i < sizeOfDeck; i++)
-    {
-        if (i % 2)
-        {
-            p1.cardPack.push_back(deck[i]);
-        }
-        else
-        {
-            p2.cardPack.push_back(deck[i]);
-        }
-    }
-}
+// void Game::playAll()
+// {
+//     for (size_t i = 0; i < 26; i++)
+//     {
+//         playTurn();
+//     }
+    
+// };
 
 void Game::playAll()
 {
-    for (size_t i = 0; i < 26; i++)
+    while (player1.stacksize() != 0)
     {
         playTurn();
     }
-    
-};
+}
 
 void Game::playTurn()
 {
-        // Check if both players are the same
-        if (&this->player1 == &this->player2)
-        {
-            throw runtime_error("player one player 2 are the same person");
-        }
+    // Check if both players are the same
+    if (&this->player1 == &this->player2)
+    {
+        throw runtime_error("player one player 2 are the same person");
+    }
 
-        if (!(player1.stacksize()))
-        {
-        throw std::string("The game is over!");
-        }
+    if (!(player1.stacksize()))
+    {
+    throw std::string("The game is over!");
+    return;
+    }
 
-        std::string turn = "";
-        std::vector<card> p1DrawCards, p2DrawCards;
-        this->numOfTurnsPlayed++;
-        
-         // Draw cards for each player
+    std::string turn = "";
+    std::vector<card> p1DrawCards, p2DrawCards;
+    this->numOfTurnsPlayed++;
+    
+        // Draw cards for each player
     card p1c = player1.pullCard();
     card p2c = player2.pullCard();
 
@@ -101,8 +109,8 @@ void Game::playTurn()
         // Handle a tie
         drawTimes++;
         if (player1.stacksize() < 2) {
-            player1.addCard(p1DrawCards);
-            player1.addCard(p2DrawCards);
+            player1.addCardToWinningPack(p1c);
+            player2.addCardToWinningPack(p2c);
             return;
         }
 
@@ -121,12 +129,17 @@ void Game::playTurn()
     // Determine the winner of the turn
     turn += player1.getName() + " played " + p1c.toString() + " " + player2.getName() + " played " +
             p2c.toString() + ".";
-    if (p1c.getNum() > p2c.getNum() || (p2c.getNum() == 1 && p1c.getNum() != 2)) {
+    if (p1c.getNum() > p2c.getNum() || (p2c.getNum() == 1 && p1c.getNum() == 2)) {
         p1Won++;
+        player1.addCardToWinningPack(p1c);
+        player1.addCardToWinningPack(p2c);
         player1.addCard(p1DrawCards);
         player1.addCard(p2DrawCards);
         turn += " " + player1.getName() + " wins.";
     } else {
+        p2Won++;
+        player2.addCardToWinningPack(p1c);
+        player2.addCardToWinningPack(p2c);
         player2.addCard(p1DrawCards);
         player2.addCard(p2DrawCards);
         turn += " " + player2.getName() + " wins.";

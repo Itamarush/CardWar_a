@@ -11,9 +11,13 @@ namespace ariel
             int kind;
 
         public:
-            card(int num, int kind){this->num = num; this->kind = kind;};
+            card(int num, int kind) : num(), kind()
+            {
+                std::swap(this->num, num);
+                std::swap(this->kind, kind);
+            };
             string toString();
-            card(){};
+            card() : num(1), kind(1){};
 
             int getNum () const
             {
@@ -31,7 +35,7 @@ namespace ariel
             };
             void setKind(int num)
             {
-                this->kind = kind;
+                this->kind = num;
             };
     };
 };

@@ -20,12 +20,9 @@ namespace ariel
             int numOfTimeWon;
             bool isActive;
 
+            Player(string name1) : name(std::move(name1)), isActive(false), numOfTimeWon(0) {};
 
-        public:
-            Player(string name1) { this->name = name1;};
-            Player(){};
-
-            string getName()
+            string getName() const
             {
                 return this->name;
             }
@@ -38,6 +35,9 @@ namespace ariel
         void setCardsTaken(int);
         card pullCard();
         void addCard(const std::vector<card>&);
+        void addCardToPack(card);
+        void addCardToWinningPack(card);
+
     };
 }
 

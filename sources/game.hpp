@@ -6,13 +6,13 @@
 namespace ariel {
     class Game {
         private:
-        Player player1;
-        Player player2;
+        Player &player1;
+        Player &player2;
         vector<string> gameLog;
         int p1Won, p2Won, drawTimes, numOfTurnsPlayed;
         
         public:
-             Game(Player &p1, Player &p2);
+             Game(Player &player1, Player &player2);
 
 
             void playTurn();
@@ -21,7 +21,7 @@ namespace ariel {
             void printWiner();
             void printLog();
             void printStats();
-            void CardsToPlayers(card, Player, Player, int);
-
+            void CardsToPlayers(card*, int);
+            void createDeck(card*, int);
     };
 }

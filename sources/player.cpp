@@ -5,6 +5,15 @@
 using namespace std;
 using namespace ariel;
 
+void Player::addCardToPack(card card)
+{
+    this->cardPack.push_back(card);
+}
+
+void Player::addCardToWinningPack(card card)
+{
+    this->cardPackWon.push_back(card);
+}
 
 int Player::stacksize()
 {
@@ -18,7 +27,7 @@ int Player::cardesTaken()
 
 bool Player::isPlaying()
 {
-    return isPlaying;
+    return isActive;
 };
 
 void Player::joinedGame()
@@ -40,7 +49,8 @@ card Player::pullCard()
 {
     if (cardPack.empty())
     {
-        throw std::runtime_error("The game is over!");
+        throw std::runtime_error("Player's card pack is empty");
+
     }
 
     card card = cardPack.front();
@@ -48,9 +58,9 @@ card Player::pullCard()
     return card;
 }
 
-void Player::addCard(const std::vector<card>& cards_to_add)
+void Player::addCard(const std::vector<card>& card)
 {
-    for (const auto& card : cards_to_add)
+    for (const auto& card : card)
     {
         this->cardPackWon.push_back(card);
     }

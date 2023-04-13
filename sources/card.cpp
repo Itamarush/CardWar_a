@@ -6,22 +6,22 @@ string card::toString()
     string str = "";
     switch (this->num)
     {
-    case 1:
-        str += "Ace";
-        break;
-    case 11:
-        str += "Jack";
-        break;
-    case 12:
-        str += "Queen";
-        break;
-    case 13:
-        str += "King";
-        break;
+        case 1:
+            str += "Ace";
+            break;
+        case 11:
+            str += "Jack";
+            break;
+        case 12:
+            str += "Queen";
+            break;
+        case 13:
+            str += "King";
+            break;
 
-    default:
-        str += to_string(num);
-        break;
+        default:
+            str += to_string(num);
+            break;
     }
     
     switch (kind)
